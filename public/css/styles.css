@@ -31,11 +31,18 @@ label {
     color: #777;
 }
 
-input {
+input, .dropdown-rooms {
+    color: #777;
+    font-size: 14px;
     border: 1px solid #eeeeee;
     padding: 12px;
     outline: none;
 }
+
+.dropdown-rooms{
+    margin-bottom: 16px;
+}
+
 
 button {
     cursor: pointer;

@@ -4,7 +4,7 @@ const http = require('http');
 const socketio = require('socket.io');
 const Filter = require('bad-words')
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { addUser, removeUser, getUser, getUsersInRoom, getChatRooms } = require('./utils/users')
 
 const app = express();
 const server = http.createServer(app); //created raw server
@@ -16,8 +16,14 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
 
 
+
+
 io.on('connection', (socket) => {
     console.log('New WebSocket connection established.')
+
+    socket.on('main-page', () => {
+        socket.emit('chatRooms', getChatRooms())
+    })
 
     socket.on('join', (options, callback) => {
 

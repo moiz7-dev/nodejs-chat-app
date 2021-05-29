@@ -43,9 +43,25 @@ const getUsersInRoom = (room) => {
 }
 
 
+const getChatRooms = () => {
+    let rooms = []
+    users.forEach((user) => {
+        rooms.push(user.room)
+    })
+
+    uniqueRooms = [...new Set(rooms)];
+    rooms = []
+    uniqueRooms.forEach((room) => {
+        rooms.push({room})
+    })
+
+    return rooms;
+}
+
 module.exports = {
     addUser,
     removeUser,
     getUser,
-    getUsersInRoom
+    getUsersInRoom,
+    getChatRooms
 }
