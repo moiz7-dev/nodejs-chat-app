@@ -31,12 +31,17 @@ label {
     color: #777;
 }
 
-input, .dropdown-rooms {
+input, .dropdown-rooms, .no-rooms {
     color: #777;
     font-size: 14px;
     border: 1px solid #eeeeee;
     padding: 12px;
     outline: none;
+}
+
+.no-rooms{
+    padding: 0;
+    margin-bottom: 12px;
 }
 
 .dropdown-rooms{
