@@ -15,9 +15,6 @@ const port = process.env.PORT || 3000
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
 
-
-
-
 io.on('connection', (socket) => {
     console.log('New WebSocket connection established.')
 
@@ -28,20 +25,25 @@ io.on('connection', (socket) => {
     socket.on('join', (options, callback) => {
 
         // const { error, user } = addUser({ id:socket.id, ...options })
-        const { error, user } = addUser({ id:socket.id, ...options })
+        try {
+            const { error, user } = addUser({ id: socket.id, ...options })
 
-        if(error) {
-            return callback(error)
+            if (error) {
+                return callback(error)
+            }
+
+            socket.join(user.room)
+            socket.emit('message', generateMessage('Admin', "Welcome!"))
+            socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined the room!`))
+            io.to(user.room).emit('roomData', ({
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            }))
+            callback()
+        } catch (e) {
+            return callback('Something went wrong!')
         }
 
-        socket.join(user.room)
-        socket.emit('message', generateMessage('Admin', "Welcome!"))
-        socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined the room!`))
-        io.to(user.room).emit('roomData', ({
-            room: user.room,
-            users: getUsersInRoom(user.room)
-        }))
-        callback()
     })
 
     socket.on('sendMessage', (message, callback) => {
